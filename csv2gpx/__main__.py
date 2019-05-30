@@ -43,8 +43,6 @@ def dm2dd(dm):
 co_format = ['DD', 'DM', 'DMS']
 
 
-
-
 parser = argparse.ArgumentParser(prog='csv2gpx', description='Convert a CSV GPS track into a gpx track')
 parser.add_argument('--author', dest='author', type=str, default=None, help='Set the author tag in metadata')
 parser.add_argument('--url', dest='url', type=str, default=None, help='Set the url tag in metadata')
