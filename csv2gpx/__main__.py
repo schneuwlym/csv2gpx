@@ -96,7 +96,7 @@ with open(args.file, mode='r') as csv_file:
             trk_trkseg_trkpt.set('lat', dms2dd(row['latitude']))
             trk_trkseg_trkpt.set('lon', dms2dd(row['longitude']))
         time = SubElement(trk_trkseg_trkpt, 'time')
-        t = datetime.datetime.strptime('{date} {time}'.format(date=row['date'], time=row['time']), '%Y.%m.%d %H:%M:%S')
+        t = datetime.datetime.strptime('{date} {time}'.format(date=row['date'], time=row['time']), '%d.%m.%Y %H:%M:%S')
         cstTimeDelta = datetime.timedelta(hours=int(row['time_delta']))
         tzObject = datetime.timezone(cstTimeDelta)
         t = t.replace(tzinfo=tzObject)
