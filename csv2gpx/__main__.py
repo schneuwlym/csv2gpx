@@ -42,7 +42,8 @@ if args.author or args.url:
     metadata = SubElement(gpx, 'metadata')
     if args.author:
         author = SubElement(metadata, 'author')
-        author.text = args.author
+        author_name = SubElement(author, 'name')
+        author_name.text = args.author
     if args.url:
         url = SubElement(metadata, 'link')
         url.set('href', args.url)
