@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import argparse
 import csv
 import datetime
@@ -13,12 +14,12 @@ def prettify(elem):
     """
     rough_string = ElementTree.tostring(elem, 'utf-8')
     reparsed = minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="    ")
+    return reparsed.toprettyxml(indent='    ')
 
 
 def is_valid_file(file_):
     if not os.path.exists(file_) or type(file_) is not str:
-        parser.error("The file %s does not exist!" % file_)
+        parser.error('The file %s does not exist!' % file_)
     return file_
 
 
