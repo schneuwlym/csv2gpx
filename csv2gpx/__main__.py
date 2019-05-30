@@ -47,7 +47,8 @@ parser = argparse.ArgumentParser(prog='csv2gpx', description='Convert a CSV GPS 
 parser.add_argument('--author', dest='author', type=str, default=None, help='Set the author tag in metadata')
 parser.add_argument('--url', dest='url', type=str, default=None, help='Set the url tag in metadata')
 parser.add_argument('--file', dest='file', type=is_valid_file, required=True, help='CSV file path')
-parser.add_argument('--output', dest='output', type=str, required=True, help='output GPX file')
+parser.add_argument('--output', dest='output', type=str, default=None, help='Output GPX file. If not set,'
+                                                                            ' the output is printed to stdout')
 parser.add_argument('--delimiter', dest='delimiter', type=str, default=',', help='CSV field delimiter')
 parser.add_argument('--co-format', dest='format', type=str, default=co_format[0], choices=co_format,
                     help='Change the coordinate format. DD=decimal degrees / DMS=degrees minutes seconds')
@@ -100,7 +101,8 @@ with open(args.file, mode='r') as csv_file:
         t = t.replace(tzinfo=tzObject)
         time.text = t.isoformat()
 
-with open(args.output, mode='w') as output_file:
-    output_file.write(prettify(gpx))
-
-print(prettify(gpx))
+if args.output:
+    with open(args.output, mode='w') as output_file:
+        output_file.write(prettify(gpx))
+else:
+    print(prettify(gpx))
