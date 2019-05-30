@@ -4,6 +4,7 @@ import argparse
 import csv
 import datetime
 import os
+import re
 from xml.etree.ElementTree import Element, SubElement
 from xml.etree import ElementTree
 from xml.dom import minidom
@@ -23,12 +24,35 @@ def is_valid_file(file_):
     return file_
 
 
-parser = argparse.ArgumentParser(description='Convert a CSV GPS track into a gpx track')
+def dms2dd(dms):
+    tmp = re.findall('(\d+)°([\d\.]+)\'([\d\.]+)\"?([NSWE]{1})', dms)[0]
+    dd = int(tmp[0]) + float(tmp[1])/60 + float(tmp[2])/3600
+    if tmp[3].upper() in ['S', 'W']:
+        dd = -dd
+    return "{0:.6f}".format(dd)
+
+
+def dm2dd(dm):
+    tmp = re.findall('(\d+)°([\d\.]+)\'?([NSWE]{1})', dm)[0]
+    dd = int(tmp[0]) + float(tmp[1])/60
+    if tmp[2].upper() in ['S', 'W']:
+        dd = -dd
+    return "{0:.6f}".format(dd)
+
+
+co_format = ['DD', 'DM', 'DMS']
+
+
+
+
+parser = argparse.ArgumentParser(prog='csv2gpx', description='Convert a CSV GPS track into a gpx track')
 parser.add_argument('--author', dest='author', type=str, default=None, help='Set the author tag in metadata')
 parser.add_argument('--url', dest='url', type=str, default=None, help='Set the url tag in metadata')
 parser.add_argument('--file', dest='file', type=is_valid_file, required=True, help='CSV file path')
 parser.add_argument('--output', dest='output', type=str, required=True, help='output GPX file')
 parser.add_argument('--delimiter', dest='delimiter', type=str, default=',', help='CSV field delimiter')
+parser.add_argument('--co-format', dest='format', type=str, default=co_format[0], choices=co_format,
+                    help='Change the coordinate format. DD=decimal degrees / DMS=degrees minutes seconds')
 
 args = parser.parse_args()
 
@@ -62,8 +86,15 @@ with open(args.file, mode='r') as csv_file:
             trk_desc.text = row['track_description']
             trk_trkseg = SubElement(trk, 'trkseg')
         trk_trkseg_trkpt = SubElement(trk_trkseg, 'trkpt')
-        trk_trkseg_trkpt.set('lat', row['latitude'])
-        trk_trkseg_trkpt.set('lon', row['longitude'])
+        if args.format == 'DD':
+            trk_trkseg_trkpt.set('lat', row['latitude'])
+            trk_trkseg_trkpt.set('lon', row['longitude'])
+        elif args.format == 'DM':
+            trk_trkseg_trkpt.set('lat', dm2dd(row['latitude']))
+            trk_trkseg_trkpt.set('lon', dm2dd(row['longitude']))
+        elif args.format == 'DMS':
+            trk_trkseg_trkpt.set('lat', dms2dd(row['latitude']))
+            trk_trkseg_trkpt.set('lon', dms2dd(row['longitude']))
         time = SubElement(trk_trkseg_trkpt, 'time')
         t = datetime.datetime.strptime('{date} {time}'.format(date=row['date'], time=row['time']), '%Y.%m.%d %H:%M:%S')
         cstTimeDelta = datetime.timedelta(hours=int(row['time_delta']))
