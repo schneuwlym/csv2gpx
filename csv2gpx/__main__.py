@@ -51,7 +51,10 @@ parser.add_argument('--output', dest='output', type=str, default=None, help='Out
                                                                             ' the output is printed to stdout')
 parser.add_argument('--delimiter', dest='delimiter', type=str, default=',', help='CSV field delimiter')
 parser.add_argument('--co-format', dest='format', type=str, default=co_format[0], choices=co_format,
-                    help='Change the coordinate format. DD=decimal degrees / DMS=degrees minutes seconds')
+                    help='Change the coordinate format: '
+                         'DD=decimal degrees (39.5432) / '
+                         'DM=degrees minutes (39°32.592N) / '
+                         'DMS=degrees minutes seconds (39°32\'35.52"N)')
 
 args = parser.parse_args()
 
