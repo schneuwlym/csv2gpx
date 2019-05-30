@@ -7,7 +7,7 @@ This is a small script to convert tracks from a csv into a gpx file
 * Change into the directory
 * Install the package using the command
   ```bash
-  sudo python setup.py install
+  sudo python3 setup.py install
   ```
 
 ## Usage
