@@ -14,9 +14,10 @@ This is a small script to convert tracks from a csv into a gpx file
 
 After you installed the package, you can run it using:
 ```bash
-# python -m csv2gpx -h
-usage: __main__.py [-h] [--author AUTHOR] [--url URL] --file FILE --output
-                   OUTPUT [--delimiter DELIMITER]
+# python3 -m csv2gpx -h
+usage: csv2gpx [-h] [--author AUTHOR] [--url URL] --file FILE
+               [--output OUTPUT] [--delimiter DELIMITER]
+               [--co-format {DD,DM,DMS}]
 
 Convert a CSV GPS track into a gpx track
 
@@ -25,19 +26,36 @@ optional arguments:
   --author AUTHOR       Set the author tag in metadata
   --url URL             Set the url tag in metadata
   --file FILE           CSV file path
-  --output OUTPUT       output GPX file
+  --output OUTPUT       Output GPX file. If not set, the output is printed to
+                        stdout
   --delimiter DELIMITER
                         CSV field delimiter
+  --co-format {DD,DM,DMS}
+                        Change the coordinate format: DD=decimal degrees
+                        (39.5432) / DM=degrees minutes (39°32.592N) /
+                        DMS=degrees minutes seconds (39°32'35.52"N)
 ```
 
 ## Input CSV
 
 | track_name    | track_description | date       | time     | time_delta | latitude    | longitude  |
 | ------------- | ----------------- | ---------- | -------- | ---------- | ----------- | ---------- |
-| track1        | from x to y       | 2018.07.28 | 14:54:23 | 0          | 39.56332885 | 2.63388697 |
-| track1        | from x to y       | 2018.07.28 | 15:01:02 | 0          | 39.55658601 | 2.6364467  |
-| track2        | from y to z       | 2018.07.29 | 07:13:53 | 0          | 39.53169517 | 2.58579682 |
-| track2        | from y to z       | 2018.07.29 | 07:30:43 | 0          | 39.53124451 | 2.58566636 |
+| track1        | from x to y       | 28.07.2018 | 14:54:23 | 0          | 39.56332885 | 2.63388697 |
+| track1        | from x to y       | 28.07.2018 | 15:01:02 | 0          | 39.55658601 | 2.6364467  |
+| track2        | from y to z       | 29.07.2018 | 07:13:53 | 0          | 39.53169517 | 2.58579682 |
+| track2        | from y to z       | 29.07.2018 | 07:30:43 | 0          | 39.53124451 | 2.58566636 |
+
+### Parameter description
+
+| name                | format |
+| ------------------- | ------ |
+| track_name          | free text |
+| track_description   | free text |
+| date                | date in this format (%d.%m.%Y) |
+| time                | time in this format (%H:%M:%S) |
+| time_delta          | time difference to UTC. 0 means given time is already in UTC |
+| latitude            | Either decimal degrees (39.5432) or degrees minutes (39°32.592'N) or degrees minutes seconds (39°32'35.52"N). You have to specify the format as script parameter. By default decimal degrees is used |
+| longitude           | Either decimal degrees (39.5432) or degrees minutes (39°32.592'N) or degrees minutes seconds (39°32'35.52"N). You have to specify the format as script parameter. By default decimal degrees is used |
 
 ### Resulting GPX
 ```xml
